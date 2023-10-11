@@ -7,35 +7,45 @@
 #include <iostream>
 #include <sstream>
 
-// Simple Tests is a simple single header testing library that I made because I'm too stupid to use Catch2, googletest, 
-// or other cool testing frameworks.
-//
-// #How-to:
-//
-// ##Declare a test
-//     #include "simpleTest.h"
+
+// # SimpleTests
+// Simple single header C++ test framework
 // 
-//     ST_TEST(ATestName, "Some description on what the test does")
-//     {
-//         ST_ASSERT(true, "this test cannot fail.")
-//     }
-//
-// ##Run all tests
-//
-//     int main()
-//     {
-//         return SimpleTests::SimpleTestsRunner::runTests();
-//     }
-//
-// ## Exemple output:
-//
-//     Test1: should fail X
-//     Failed: assert false (C:\Repository\SimpleTests\SampleProject\main.cpp:5)
-//     Test2 : should pass V
-//     SomeTestInAnotherFile1 : should fail X
-//     Failed : another assert false (C:\Repository\SimpleTests\SampleProject\Tests.cpp:4)
-//     SomeTestInAnotherFile2 : should pass V
-//     2 ouf of 4 tests passed.
+// Simple Tests is a simple single header testing library that I made because I'm too stupid to use Catch2, googletest, 
+// or the other cool testing frameworks.
+// 
+// # Installation instructions
+// Download `SimpleTests/simpleTests.h` and include it in your project and build system
+// 
+// # How - to:
+// ## Declare a test
+// ```c++
+// #include "simpleTest.h"
+// 
+// ST_TEST(ATestName, "Some description on what the test does")
+// {
+//     ST_ASSERT(true, "this test cannot fail.")
+// }
+// ```
+// 
+// ## Run all tests
+// ```c++
+// int main()
+// {
+//     return SimpleTests::SimpleTestsRunner::runTests();
+// }
+// ```
+// 
+// ## Exemple output :
+// ```
+// Test1 : should fail X FAILED
+// Failed : assert false (C : \Repository\SimpleTests\SampleProject\main.cpp:5)
+// Test2 : should pass +
+// SomeTestInAnotherFile1 : should fail X FAILED
+// Failed : another assert false (C : \Repository\SimpleTests\SampleProject\tests.cpp:4)
+// SomeTestInAnotherFile2 : should pass +
+// 2 ouf of 4 tests passed.
+// ```
 
 
 /*
