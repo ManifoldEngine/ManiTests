@@ -185,7 +185,7 @@ namespace SimpleTests
     static void TESTNAME()
 
 #define ST_ASSERT(EXPRESSION, DESCRIPTION) \
-    if (!EXPRESSION) \
+    if (!(EXPRESSION)) \
     {\
         std::stringstream ss;\
         ss << "Failed: " << DESCRIPTION << " (" << __FILE__ << ":" << __LINE__ << ")\n";\
