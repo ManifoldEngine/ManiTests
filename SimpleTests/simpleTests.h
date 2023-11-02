@@ -66,25 +66,37 @@ namespace SimpleTests
         std::function<void()> f;
     };
 
-    // Simple Tests Globals
-    inline std::vector<SimpleTest> G_TESTS;
-    inline std::queue<std::string> G_TESTLOGS;
-    inline std::queue<std::string> G_ASSERTLOGS;
-    // Simple Tests Globals end
-
     // Simple test's runner 
     struct SimpleTestsContext
     {
         // registers a new test case
         static void registerTest(const std::string& title, const std::string& description, std::function<void()> func)
         {
-            G_TESTS.push_back({ title, description, func });
+            getTests().push_back({title, description, func});
         }
 
         // pushes an assert message in the assert logs queue. it will be consumed once the current test is completed
         static void notifyAssertFailed(const std::string& message)
         {
-            G_ASSERTLOGS.push(message);
+            getAssertLogs().push(message);
+        }
+
+        static std::vector<SimpleTest>& getTests() 
+        {
+            static std::vector<SimpleTest> s_tests;
+            return s_tests;
+        }
+        
+        static std::queue<std::string>& getTestLogs() 
+        {
+            static std::queue<std::string> s_testLogs;
+            return s_testLogs;
+        }
+
+        static std::queue<std::string>& getAssertLogs() 
+        {
+            static std::queue<std::string> s_assertLogs;
+            return s_assertLogs;
         }
     };
 
@@ -97,11 +109,15 @@ namespace SimpleTests
 #define BOLDGREEN   "\033[1m\033[32m"      /* Bold Green */
 #define RESET       "\033[0m"
 
-        // Executes all tests in G_TESTS
+        // Executes all tests in s_tests
         static int runTests()
         {
+            auto& tests = SimpleTestsContext::getTests();
+            auto& testLogs = SimpleTestsContext::getTestLogs();
+            auto& assertLogs = SimpleTestsContext::getAssertLogs();
+
             int failedTestCounter = 0;
-            for (auto& test : G_TESTS)
+            for (auto& test : tests)
             {
                 // format the test title
                 std::stringstream testTitleStream;
@@ -115,8 +131,8 @@ namespace SimpleTests
                 // run the test
                 test.f();
                                 
-                // if atleast one assert log was pushed in the G_ASSERTLOGS, the test has failed.
-                if (G_ASSERTLOGS.size() > 0)
+                // if atleast one assert log was pushed in the s_assertLogs, the test has failed.
+                if (assertLogs.size() > 0)
                 {
                     testTitleStream << BOLDRED << " X" << RED << " FAILED" << RESET;
                 }
@@ -127,34 +143,34 @@ namespace SimpleTests
                 testTitleStream << "\n";
 
                 // push the test's title in the test logs queue
-                G_TESTLOGS.push(testTitleStream.str());
+               testLogs.push(testTitleStream.str());
 
-                if (G_ASSERTLOGS.size() > 0)
+                if (assertLogs.size() > 0)
                 {
                     // increment the failed test counter for the final display
                     failedTestCounter++;
 
                     // dump all assert logs in the test logs queue (after the title)
-                    while (G_ASSERTLOGS.size() > 0)
+                    while (assertLogs.size() > 0)
                     {
                         std::stringstream ss;
-                        ss << RED << G_ASSERTLOGS.front() << RESET;
-                        G_TESTLOGS.push(ss.str());
-                        G_ASSERTLOGS.pop();
+                        ss << RED << assertLogs.front() << RESET;
+                       testLogs.push(ss.str());
+                        assertLogs.pop();
                     }
                 }
             }
 
             // dump the whole test logs in std::cout
-            while (G_TESTLOGS.size() > 0)
+            while (testLogs.size() > 0)
             {
-                std::cout << G_TESTLOGS.front();
-                G_TESTLOGS.pop();
+                std::cout <<testLogs.front();
+               testLogs.pop();
             }
 
             // display the final test success count.
-            std::cout << G_TESTS.size() - failedTestCounter << " ouf of " << G_TESTS.size() << " test";
-            if (G_TESTS.size() > 1)
+            std::cout << tests.size() - failedTestCounter << " ouf of " << tests.size() << " test";
+            if (tests.size() > 1)
             {
                 // I'm a gentleman.
                 std::cout << "s";
