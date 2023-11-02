@@ -39,7 +39,7 @@ ST_SECTION_BEGIN(MySection, "My section's description")
          // clean up my tests' context
      }
 
-ST_SETION_END(MySection)
+ST_SECTION_END(MySection)
 ```
 
 ## Run all tests
