@@ -248,7 +248,7 @@ namespace SimpleTests
 
             if (section.tests.size() > 0)
             {
-                // the this section's tests
+                // run this section's tests
                 runTests(section.tests, sectionStack, indent);
 
                 std::cout << "\n";
@@ -401,11 +401,6 @@ namespace SimpleTests
  * Simple Tests macros
  * ###############################################################
  */
-
-// One level of macro indirection is required in order to resolve __COUNTER__,
-// and get varname1 instead of varname__COUNTER__.
-#define ST_LINE() __LINE__
-#define ST_UNIQUE_NAME(base) base ## ST_LINE()
 
 #define ST_TEST(TESTNAME, DESCRIPTION) \
     static void TESTNAME(); \
