@@ -18,6 +18,30 @@ ST_TEST(ATestName, "Some description on what the test does")
 }
 ```
 
+## Declare a section
+```c++
+#include "simpleTest.h"
+
+ST_SECTION_BEGIN(MySection, "My section's description")
+
+     ST_BEFORE_EACH(MyBeforeEachFunctor)
+     {
+         // Initialize my tests' context
+     }
+
+     ST_TEST(MyTest, "My test's description")
+     {
+         ST_ASSERT(true, "all is good.");
+     }
+
+     ST_AFTER_EACH(MyBeforeEachFunctor)
+     {
+         // clean up my tests' context
+     }
+
+ST_SETION_END(MySection)
+```
+
 ## Run all tests
 ```c++
 int main()
