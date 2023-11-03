@@ -10,7 +10,7 @@ workspace "SimpleTests"
     objdir ("bin-int/" .. outputdir)
     symbols "On"
 
-    includedirs { "SimpleTests/" }
+    includedirs { "include/" }
 
 project "SampleProject"
     kind "ConsoleApp"
