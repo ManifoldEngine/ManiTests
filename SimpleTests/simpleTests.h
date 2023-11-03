@@ -90,7 +90,6 @@ namespace SimpleTests
 #define ST_FAILED_STRING "[ FAILED ] "
 #define ST_ASSERT_STRING "[ ASSERT ] "
 
-
     // Test container
     struct SimpleTest
     {
@@ -260,27 +259,8 @@ namespace SimpleTests
         {
             bool bPassed = true;
 
-<<<<<<< HEAD
             // the this section's tests
             bPassed &= runTests(section.tests, sectionStack);
-=======
-                // display the section title and description
-                std::cout << indent << section.title << (section.description.empty() ? "" : ": " + section.description) << "\n";
-            }
-
-            if (!bIsInGlobalScope)
-            {
-                indent += "\t";
-            }
-
-            if (section.tests.size() > 0)
-            {
-                // run this section's tests
-                runTests(section.tests, sectionStack, indent);
-
-                std::cout << "\n";
-            }
->>>>>>> 16e4609bd4c3a645a2953eb8b79418ab7c2a0b62
 
             sectionStack.push_back(&section);
             for (Section& child : section.children)
