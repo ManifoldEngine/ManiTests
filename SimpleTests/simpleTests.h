@@ -3,11 +3,10 @@
 #include <functional>
 #include <string>
 #include <vector>
+#include <map>
 #include <queue>
 #include <iostream>
 #include <sstream>
-#include <map>
-
 
 // # SimpleTests
 // Simple single header C++ test framework
@@ -79,6 +78,19 @@
  */
 namespace SimpleTests
 {
+// Colors
+#define RED         "\033[31m"      /* Red */
+#define GREEN       "\033[32m"      /* Green */
+#define BOLD        "\033[1m"
+#define RESET       "\033[0m"
+
+// labels
+#define ST_DASHES_STRING "[--------] "
+#define ST_PASSED_STRING "[   ok   ] "
+#define ST_FAILED_STRING "[ FAILED ] "
+#define ST_ASSERT_STRING "[ ASSERT ] "
+
+
     // Test container
     struct SimpleTest
     {
@@ -88,6 +100,34 @@ namespace SimpleTests
         std::string title;
         std::string description;
         std::function<void()> f;
+        bool bPassed = false;
+
+        void addAssertLog(const std::string& assertLog)
+        {
+            assertLogs.push_back(assertLog);
+        }
+
+        std::string getLog(const std::string& indent) const
+        {
+            std::stringstream testStream;
+            // if atleast one assert log was pushed in the s_assertLogs, the test has failed.
+            if (!bPassed)
+            {
+                testStream << BOLD << RED << ST_FAILED_STRING << RED << indent << title << ": " << description << RESET << "\n";
+                for (const std::string& assertLog : assertLogs)
+                {
+                    testStream << RED << ST_ASSERT_STRING << indent << assertLog << RESET;
+                }
+            }
+            else
+            {
+                testStream << BOLD << GREEN << ST_PASSED_STRING << RESET << indent << title << ": " << description << "\n";
+            }
+
+            return testStream.str();
+        }
+    private:
+        std::vector<std::string> assertLogs;
     };
 
     // section container
@@ -96,7 +136,6 @@ namespace SimpleTests
         Section(const std::string& inTitle, const std::string& inDescription)
           : title(inTitle), description(inDescription)
         {
-
         };
 
         std::string title;
@@ -107,8 +146,16 @@ namespace SimpleTests
         std::vector<SimpleTest> tests;
         std::vector<Section> children;
 
-    private:
-        int id = -1;
+        bool bPassed = false;
+
+        std::string getLog(const std::string& indent) const
+        {
+            // display the section title and description
+            std::stringstream sectionTitle;
+            sectionTitle << (bPassed ? GREEN : RED) << ST_DASHES_STRING << RESET;
+            sectionTitle << indent << BOLD << title << (description.empty() ? "" : ": " + description) << RESET << "\n";
+            return sectionTitle.str();
+        }
     };
 
     // Simple's test context. this struct exposes all the Simple tests' state as static function. This way they're initialized when we call
@@ -151,12 +198,6 @@ namespace SimpleTests
         {
             SimpleTestsContext::getSectionStack().pop_back();
         }
-        
-        static std::queue<std::string>& getTestLogs() 
-        {
-            static std::queue<std::string> s_testLogs;
-            return s_testLogs;
-        }
 
         static std::queue<std::string>& getAssertLogs() 
         {
@@ -191,30 +232,20 @@ namespace SimpleTests
 
     struct SimpleTestsRunner
     {
-// Colors
-#define RED         "\033[31m"      /* Red */
-#define GREEN       "\033[32m"      /* Green */
-#define BOLDRED     "\033[1m\033[31m"      /* Bold Red */
-#define BOLDGREEN   "\033[1m\033[32m"      /* Bold Green */
-#define RESET       "\033[0m"
-
         // Executes all tests in s_tests
         static int runTests()
         {
             Section global = SimpleTestsContext::getGlobalSection();
-            auto& testLogs = SimpleTestsContext::getTestLogs();
-            auto& assertLogs = SimpleTestsContext::getAssertLogs();
-            int failedTestCounter = 0;
 
-            std::vector<const Section*> sectionStack = { &global };
+            std::vector<const Section*> sectionStack;
             runSection(global, sectionStack, true);
-            
-            dumpTestLogs();
+            logSection(global, sectionStack, true);
 
-            const size_t totalTests = countTotalTest(global);
-
+            size_t totalTests = 0;
+            size_t failedTests = 0;
+            countTests(global, totalTests, failedTests);
             // display the final test success count.
-            std::cout << totalTests - failedTestCounter << " ouf of " << totalTests << " test";
+            std::cout << "\n\n" << totalTests - failedTests << " ouf of " << totalTests << " test";
             if (totalTests > 1)
             {
                 // I'm a gentleman.
@@ -222,61 +253,34 @@ namespace SimpleTests
             }
             std::cout <<" passed." << "\n";
 
-            return failedTestCounter > 0 ? 0 : -1;
+            return failedTests > 0 ? 0 : -1;
         }
     
-        static void runSection(const Section& section, std::vector<const Section*>& sectionStack, bool bIsInGlobalScope)
+        static bool runSection(Section& section, std::vector<const Section*>& sectionStack, bool bIsInGlobalScope)
         {
-            // run a single section
-            std::string indent = "";
-            if (!bIsInGlobalScope)
-            {
-                // if we're not in the global scope, we indent once per section
-                for (int i = 1; i < sectionStack.size() - 1; ++i)
-                {
-                    indent += "\t";
-                }
+            bool bPassed = true;
 
-                // display the section title and description
-                std::cout << indent << section.title << (section.description.empty() ? "" : ": " + section.description) << "\n";
-            }
-
-            if (!bIsInGlobalScope)
-            {
-                indent += "\t";
-            }
-
-            if (section.tests.size() > 0)
-            {
-                // the this section's tests
-                runTests(section.tests, sectionStack, indent);
-
-                std::cout << "\n";
-            }
+            // the this section's tests
+            bPassed &= runTests(section.tests, sectionStack);
 
             sectionStack.push_back(&section);
-            for (const Section& child : section.children)
+            for (Section& child : section.children)
             {
                 // run the children sections
-                runSection(child, sectionStack, false);
+                bPassed &= runSection(child, sectionStack, false);
             }
-        
+
+            //std::cout << ST_DASHES_STRING << "\n";
             sectionStack.pop_back();
+            section.bPassed = bPassed;
+            return bPassed;
         }
 
-        static void runTests(const std::vector<SimpleTest>& tests, const std::vector<const Section*>& sectionStack, const std::string& indent)
+        static bool runTests(std::vector<SimpleTest>& tests, const std::vector<const Section*>& sectionStack)
         {
+            bool bPassed = true;
             for (auto& test : tests)
             {
-                // format the test title
-                std::stringstream testTitleStream;
-                testTitleStream << indent << test.title;
-                if (!test.description.empty())
-                {
-                    // append the description if has one
-                    testTitleStream << ": " << test.description;
-                }
-
                 // run the test
                 for (const Section* section : sectionStack)
                 {
@@ -297,21 +301,9 @@ namespace SimpleTests
                 }
 
                 auto& assertLogs = SimpleTestsContext::getAssertLogs();
-                auto& testLogs = SimpleTestsContext::getTestLogs();
-                // if atleast one assert log was pushed in the s_assertLogs, the test has failed.
-                if (SimpleTestsContext::getAssertLogs().size() > 0)
-                {
-                    testTitleStream << BOLDRED << " X" << RED << " FAILED" << RESET;
-                }
-                else
-                {
-                    testTitleStream << BOLDGREEN << " +" << RESET;
-                }
-                testTitleStream << "\n";
 
-                // push the test's title in the test logs queue
-                testLogs.push(testTitleStream.str());
-
+                test.bPassed = assertLogs.size() == 0;
+                bPassed &= test.bPassed;
                 if (assertLogs.size() > 0)
                 {
                     // increment the failed test counter for the final display
@@ -321,37 +313,65 @@ namespace SimpleTests
                     while (assertLogs.size() > 0)
                     {
                         std::stringstream ss;
-                        ss << RED << indent << assertLogs.front() << RESET;
-                        testLogs.push(ss.str());
+                        ss << RED << ST_ASSERT_STRING << assertLogs.front() << RESET;
+                
+                        test.addAssertLog(ss.str());
                         assertLogs.pop();
                     }
                 }
-
-                dumpTestLogs();
             }
+            return bPassed;
         }
-    
-        static void dumpTestLogs()
+
+        static void logSection(const Section& section, std::vector<const Section*>& sectionStack, bool bIsInGlobalScope)
         {
-            auto& testLogs = SimpleTestsContext::getTestLogs();
-            // dump the whole test logs in std::cout
-            while (testLogs.size() > 0)
+            sectionStack.push_back(&section);
+
+            std::string indent = "";
+            if (sectionStack.size() > 1)
             {
-                std::cout << testLogs.front();
-                testLogs.pop();
+                for (size_t i = 2; i < sectionStack.size(); ++i)
+                {
+                    indent += "|--";
+                }
             }
+
+            std::cout << section.getLog(indent);
+
+            if (sectionStack.size() > 0)
+            {
+                indent += "|--";
+            }
+
+            for (const auto& test : section.tests)
+            {
+                std::cout << test.getLog(indent);
+            }
+
+            for (const auto& child : section.children)
+            {
+                logSection(child, sectionStack, false);
+            }
+
+            sectionStack.pop_back();
         }
 
-        static size_t countTotalTest(const Section& section)
+        static void countTests(const Section& section, size_t& outTotalTestCount, size_t& outFailedTotalTestCount)
         {
-            size_t result = 0;
             for (const Section& child : section.children)
             {
-                result += countTotalTest(child);
+                countTests(child, outTotalTestCount, outFailedTotalTestCount);
             }
 
-            result += section.tests.size();
-            return result;
+            for (const SimpleTest& test : section.tests)
+            {
+                if (!test.bPassed)
+                {
+                    outFailedTotalTestCount++;
+                }
+            }
+
+            outTotalTestCount += section.tests.size();
         }
     };
 
@@ -421,7 +441,8 @@ namespace SimpleTests
     }
 
 #define ST_SECTION_BEGIN(SECTIONNAME, DESCRIPTION) \
-    static SimpleTests::SectionBeginner sectionBeginner_##SECTIONNAME(#SECTIONNAME, DESCRIPTION);
+    static SimpleTests::SectionBeginner sectionBeginner_##SECTIONNAME(#SECTIONNAME, DESCRIPTION);\
+    namespace
 
 #define ST_SECTION_END(SECTIONNAME) \
     static SimpleTests::SectionEnder sectionEnder_##SECTIONNAME;

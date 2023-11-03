@@ -23,7 +23,7 @@ ST_TEST(ATestName, "Some description on what the test does")
 #include "simpleTest.h"
 
 ST_SECTION_BEGIN(MySection, "My section's description")
-
+{
      ST_BEFORE_EACH(MyBeforeEachFunctor)
      {
          // Initialize my tests' context
@@ -38,7 +38,7 @@ ST_SECTION_BEGIN(MySection, "My section's description")
      {
          // clean up my tests' context
      }
-
+}
 ST_SETION_END(MySection)
 ```
 
