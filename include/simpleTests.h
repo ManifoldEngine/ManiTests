@@ -258,11 +258,11 @@ namespace SimpleTests
         static bool runSection(Section& section, std::vector<const Section*>& sectionStack, bool bIsInGlobalScope)
         {
             bool bPassed = true;
+            sectionStack.push_back(&section);
 
             // the this section's tests
             bPassed &= runTests(section.tests, sectionStack);
 
-            sectionStack.push_back(&section);
             for (Section& child : section.children)
             {
                 // run the children sections
