@@ -34,12 +34,17 @@ ST_SECTION_BEGIN(MySection, "My section's description")
          ST_ASSERT(true, "all is good.");
      }
 
-     ST_AFTER_EACH(MyBeforeEachFunctor)
+     ST_AFTER_EACH(MyAfterEachFunctor)
      {
          // clean up my tests' context
      }
+<<<<<<< HEAD
 }
 ST_SETION_END(MySection)
+=======
+
+ST_SECTION_END(MySection)
+>>>>>>> 16e4609bd4c3a645a2953eb8b79418ab7c2a0b62
 ```
 
 ## Run all tests

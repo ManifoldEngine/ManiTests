@@ -260,8 +260,27 @@ namespace SimpleTests
         {
             bool bPassed = true;
 
+<<<<<<< HEAD
             // the this section's tests
             bPassed &= runTests(section.tests, sectionStack);
+=======
+                // display the section title and description
+                std::cout << indent << section.title << (section.description.empty() ? "" : ": " + section.description) << "\n";
+            }
+
+            if (!bIsInGlobalScope)
+            {
+                indent += "\t";
+            }
+
+            if (section.tests.size() > 0)
+            {
+                // run this section's tests
+                runTests(section.tests, sectionStack, indent);
+
+                std::cout << "\n";
+            }
+>>>>>>> 16e4609bd4c3a645a2953eb8b79418ab7c2a0b62
 
             sectionStack.push_back(&section);
             for (Section& child : section.children)
@@ -421,11 +440,6 @@ namespace SimpleTests
  * Simple Tests macros
  * ###############################################################
  */
-
-// One level of macro indirection is required in order to resolve __COUNTER__,
-// and get varname1 instead of varname__COUNTER__.
-#define ST_LINE() __LINE__
-#define ST_UNIQUE_NAME(base) base ## ST_LINE()
 
 #define ST_TEST(TESTNAME, DESCRIPTION) \
     static void TESTNAME(); \
