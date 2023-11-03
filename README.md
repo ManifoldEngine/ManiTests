@@ -38,13 +38,8 @@ ST_SECTION_BEGIN(MySection, "My section's description")
      {
          // clean up my tests' context
      }
-<<<<<<< HEAD
 }
 ST_SETION_END(MySection)
-=======
-
-ST_SECTION_END(MySection)
->>>>>>> 16e4609bd4c3a645a2953eb8b79418ab7c2a0b62
 ```
 
 ## Run all tests
