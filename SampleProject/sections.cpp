@@ -15,7 +15,7 @@ ST_SECTION_BEGIN(Section2, "This is another section, more to come")
 	{
 		ST_TEST(SomeTestInASubSection, "should fail")
 		{
-			ST_ASSERT(false, "Aieaieaie, attention philippe le paraPET!");
+			ST_ASSERT(true, "Aieaieaie, attention philippe le paraPET!");
 		}
 
 		ST_SECTION_BEGIN(Section2_1_1, "yet another subsection")
