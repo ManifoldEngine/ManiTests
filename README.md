@@ -52,11 +52,22 @@ int main()
 
 ## Exemple output:
 ```
-Test1: should fail X FAILED
-Failed: assert false (C:\Repository\SimpleTests\SampleProject\main.cpp:5)
-Test2: should pass +
-SomeTestInAnotherFile1: should fail X FAILED
-Failed: another assert false (C:\Repository\SimpleTests\SampleProject\tests.cpp:4)
-SomeTestInAnotherFile2: should pass +
-2 ouf of 4 tests passed.
+[--------] Global
+[ FAILED ] |--Test1: should fail
+[ ASSERT ] |--[ ASSERT ] Failed: assert false (C:\Repository\SimpleTests\SampleProject\main.cpp:5)
+[   ok   ] |--Test2: should pass
+[   ok   ] |--SomeNotFancyTest: Should not be initialized
+[   ok   ] |--SomeTestInAnotherFile2: should pass
+[--------] Section1: This is the first section
+[   ok   ] |--SomeTestInASection: should pass
+[--------] Section2: This is another section, more to come
+[--------] |--Section2_1: this is a subsection
+[   ok   ] |--|--SomeTestInASubSection: should fail
+[--------] |--|--Section2_1_1: yet another subsection
+[   ok   ] |--|--|--SomeTestInSection2_1_1: Should pass
+[--------] SomeFancySection: This is the fancy section
+[   ok   ] |--SomeFancyTest: Should be initialized
+
+
+7 ouf of 8 tests passed.
 ```
