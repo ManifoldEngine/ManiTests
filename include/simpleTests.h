@@ -8,7 +8,7 @@
 #include <sstream>
 
 // # SimpleTests
-// Simple single header C++ test framework
+// Simple single header C++ test library
 // 
 // Simple Tests is a simple single header testing library that I made because I'm too stupid to use Catch2, googletest, 
 // or the other cool testing frameworks.
