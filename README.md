@@ -41,6 +41,41 @@ ST_SECTION_BEGIN(MySection, "My section's description")
 }
 ST_SETION_END(MySection)
 ```
+## Run a single Test or Section
+Use `ST_TEST_ONLY` and/or `ST_SECTION_BEGIN_ONLY` to isolate tests. This is useful when debugging a single test or section. There's no need to run all the tests everytime if you're iterating.
+```c++
+#include "simpleTests.h"
+
+ST_SECTION_BEGIN(OnlySection, "Test only flow")
+{
+	// this test will run
+	ST_TEST_ONLY(OnlyTest, "OnlyTest, should pass")
+	{
+		ST_ASSERT(true, "assert true");
+	}
+
+	// this test will not run
+	ST_TEST(NotOnlyTest, "Should not run, if it does, fails.")
+	{
+		ST_ASSERT(false, "assert false");
+	}
+}
+ST_SECTION_END(OnlySection)
+
+ST_SECTION_BEGIN(OnlySubSection, "Test only flow with subsections")
+{
+	// this whole section will run
+	ST_SECTION_BEGIN_ONLY(OnlySubSubSection, "Test only flow with subsections")
+	{
+		ST_TEST(TestInOnlySubsection, "Only subsection Test, should pass")
+		{
+			ST_ASSERT(true, "assert true");
+		}
+	}
+	ST_SECTION_END(OnlySubSubSection)
+}
+ST_SECTION_END(OnlySubSection)
+```
 
 ## Run all tests
 ```c++
