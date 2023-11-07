@@ -5,7 +5,7 @@ Simple Tests is a simple single header testing library that I made because I'm t
 or the other cool testing frameworks.
 
 # Installation instructions
-Download `SimpleTests/simpleTests.h` and include it in your project and build system
+Download `include/simpleTests.h` and include it in your project and build system
 
 # How-to:
 ## Declare a test
