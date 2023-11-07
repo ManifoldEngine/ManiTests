@@ -1,5 +1,6 @@
 #include "simpleTests.h"
 
+// Uncomment me to try the _ONLY flow
 //ST_SECTION_BEGIN(OnlySection, "Test only flow")
 //{
 //	ST_TEST_ONLY(OnlyTest, "OnlyTest, should pass")
