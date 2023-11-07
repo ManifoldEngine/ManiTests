@@ -20,7 +20,7 @@ Makefile
 .cproject
 .settings
 .buildpath
-vendors/premake
+ThirdParties/premake
 GenerateProjectFiles.bat
 
 #Visual Studio
