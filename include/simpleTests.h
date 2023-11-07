@@ -267,12 +267,6 @@ namespace SimpleTests
             return s_global;
         }
 
-        static uint32_t& getFailedTestCounter()
-        {
-            static uint32_t s_failedTestCounter;
-            return s_failedTestCounter;
-        }
-
     private:
         static std::vector<SimpleTest>& getTests()
         {
@@ -439,9 +433,6 @@ namespace SimpleTests
                 hasPassed &= test.hasPassed;
                 if (assertLogs.size() > 0)
                 {
-                    // increment the failed test counter for the final display
-                    SimpleTestsContext::getFailedTestCounter()++;
-
                     // dump all assert logs in the test logs queue (after the title)
                     while (assertLogs.size() > 0)
                     {
