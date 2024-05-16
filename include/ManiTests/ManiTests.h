@@ -10,16 +10,16 @@
 // # ManiTests
 // Simple single header C++ test library
 // 
-// Simple Tests is a simple single header testing library that I made because I'm too stupid to use Catch2, googletest, 
+// ManiTests is a simple single header testing library that I made because I'm too stupid to figure out Catch2, googletest, 
 // or the other cool testing frameworks.
 // 
 // # Installation instructions
-// Download `include/ManiTests.h` and include it in your project and build system
+// include `include/ManiTests/ManiTests.h`
 // 
 // # How - to:
 // ## Declare a test
 // ```c+ +
-// #include "simpleTest.h"
+// #include <ManiTests/ManiTests.h>
 // 
 // MANI_TEST(ATestName, "Some description on what the test does")
 // {
@@ -29,7 +29,7 @@
 // 
 // ## Declare a section
 // ```c+ +
-// #include "simpleTest.h"
+// #include <ManiTests/ManiTests.h>
 // 
 // MANI_SECTION_BEGIN(MySection, "My section's description")
 // {
@@ -48,17 +48,17 @@
 //         // clean up my tests' context
 //     }
 // }
-// MANI_SETION_END(MySection)
+// MANI_SECTION_END(MySection)
 // ```
 // ## Run a single Test or Section
 // Use `MANI_TEMANI_ONLY` and /or `MANI_SECTION_BEGIN_ONLY` to isolate tests.This is useful when debugging a single test or section.There's no need to run all the tests everytime if you're iterating.
 // ```c+ +
-// #include "ManiTests.h"
+// #include <ManiTests/ManiTests.h>
 // 
 // MANI_SECTION_BEGIN(OnlySection, "Test only flow")
 // {
 //     // this test will run
-//     MANI_TEMANI_ONLY(OnlyTest, "OnlyTest, should pass")
+//     MANI_TEST_ONLY(OnlyTest, "OnlyTest, should pass")
 //     {
 //         MANI_ASSERT(true, "assert true");
 //     }
@@ -558,6 +558,12 @@ namespace ManiTests
             ManiTestsContext::endSection();
         }
     };
+
+    // runs all the tests!
+    void runTests()
+    {
+        ManiTestsRunner::runTests();
+    }
 }
 
 /*
