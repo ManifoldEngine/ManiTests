@@ -21,9 +21,9 @@
 // ```c+ +
 // #include "simpleTest.h"
 // 
-// ST_TEST(ATestName, "Some description on what the test does")
+// MANI_TEST(ATestName, "Some description on what the test does")
 // {
-//     ST_ASSERT(true, "this test cannot fail.")
+//     MANI_ASSERT(true, "this test cannot fail.")
 // }
 // ```
 // 
@@ -31,59 +31,59 @@
 // ```c+ +
 // #include "simpleTest.h"
 // 
-// ST_SECTION_BEGIN(MySection, "My section's description")
+// MANI_SECTION_BEGIN(MySection, "My section's description")
 // {
-//     ST_BEFORE_EACH(MyBeforeEachFunctor)
+//     MANI_BEFORE_EACH(MyBeforeEachFunctor)
 //     {
 //         // Initialize my tests' context
 //     }
 // 
-//     ST_TEST(MyTest, "My test's description")
+//     MANI_TEST(MyTest, "My test's description")
 //     {
-//         ST_ASSERT(true, "all is good.");
+//         MANI_ASSERT(true, "all is good.");
 //     }
 // 
-//     ST_AFTER_EACH(MyAfterEachFunctor)
+//     MANI_AFTER_EACH(MyAfterEachFunctor)
 //     {
 //         // clean up my tests' context
 //     }
 // }
-// ST_SETION_END(MySection)
+// MANI_SETION_END(MySection)
 // ```
 // ## Run a single Test or Section
-// Use `ST_TEST_ONLY` and /or `ST_SECTION_BEGIN_ONLY` to isolate tests.This is useful when debugging a single test or section.There's no need to run all the tests everytime if you're iterating.
+// Use `MANI_TEMANI_ONLY` and /or `MANI_SECTION_BEGIN_ONLY` to isolate tests.This is useful when debugging a single test or section.There's no need to run all the tests everytime if you're iterating.
 // ```c+ +
 // #include "ManiTests.h"
 // 
-// ST_SECTION_BEGIN(OnlySection, "Test only flow")
+// MANI_SECTION_BEGIN(OnlySection, "Test only flow")
 // {
 //     // this test will run
-//     ST_TEST_ONLY(OnlyTest, "OnlyTest, should pass")
+//     MANI_TEMANI_ONLY(OnlyTest, "OnlyTest, should pass")
 //     {
-//         ST_ASSERT(true, "assert true");
+//         MANI_ASSERT(true, "assert true");
 //     }
 // 
 //     // this test will not run
-//     ST_TEST(NotOnlyTest, "Should not run, if it does, fails.")
+//     MANI_TEST(NotOnlyTest, "Should not run, if it does, fails.")
 //     {
-//         ST_ASSERT(false, "assert false");
+//         MANI_ASSERT(false, "assert false");
 //     }
 // }
-// ST_SECTION_END(OnlySection)
+// MANI_SECTION_END(OnlySection)
 // 
-// ST_SECTION_BEGIN(OnlySubSection, "Test only flow with subsections")
+// MANI_SECTION_BEGIN(OnlySubSection, "Test only flow with subsections")
 // {
 //     // this whole section will run
-//     ST_SECTION_BEGIN_ONLY(OnlySubSubSection, "Test only flow with subsections")
+//     MANI_SECTION_BEGIN_ONLY(OnlySubSubSection, "Test only flow with subsections")
 //     {
-//         ST_TEST(TestInOnlySubsection, "Only subsection Test, should pass")
+//         MANI_TEST(TestInOnlySubsection, "Only subsection Test, should pass")
 //         {
-//             ST_ASSERT(true, "assert true");
+//             MANI_ASSERT(true, "assert true");
 //         }
 //     }
-//     ST_SECTION_END(OnlySubSubSection)
+//     MANI_SECTION_END(OnlySubSubSection)
 // }
-// ST_SECTION_END(OnlySubSection)
+// MANI_SECTION_END(OnlySubSection)
 // ```
 // 
 // ## Run all tests
@@ -132,10 +132,10 @@ namespace ManiTests
 #define RESET       "\033[0m"
 
 // labels
-#define ST_DASHES_STRING "[--------] "
-#define ST_PASSED_STRING "[   ok   ] "
-#define ST_FAILED_STRING "[ FAILED ] "
-#define ST_ASSERT_STRING "[ ASSERT ] "
+#define MANI_DASHES_STRING "[--------] "
+#define MANI_PASSED_STRING "[   ok   ] "
+#define MANI_FAILED_STRING "[ FAILED ] "
+#define MANI_ASSERT_STRING "[ ASSERT ] "
 
     // Test container
     struct SimpleTest
@@ -161,15 +161,15 @@ namespace ManiTests
             // if atleast one assert log was pushed in the s_assertLogs, the test has failed.
             if (!hasPassed)
             {
-                testStream << BOLD << RED << ST_FAILED_STRING << RED << indent << title << ": " << description << RESET << "\n";
+                testStream << BOLD << RED << MANI_FAILED_STRING << RED << indent << title << ": " << description << RESET << "\n";
                 for (const std::string& assertLog : assertLogs)
                 {
-                    testStream << RED << ST_ASSERT_STRING << indent << assertLog << RESET;
+                    testStream << RED << MANI_ASSERT_STRING << indent << assertLog << RESET;
                 }
             }
             else
             {
-                testStream << BOLD << GREEN << ST_PASSED_STRING << RESET << indent << title << ": " << description << "\n";
+                testStream << BOLD << GREEN << MANI_PASSED_STRING << RESET << indent << title << ": " << description << "\n";
             }
 
             return testStream.str();
@@ -202,7 +202,7 @@ namespace ManiTests
         {
             // display the section title and description
             std::stringstream sectionTitle;
-            sectionTitle << (hasPassed ? GREEN : RED) << ST_DASHES_STRING << RESET;
+            sectionTitle << (hasPassed ? GREEN : RED) << MANI_DASHES_STRING << RESET;
             sectionTitle << indent << BOLD << title << (description.empty() ? "" : ": " + description) << RESET << "\n";
             return sectionTitle.str();
         }
@@ -392,7 +392,7 @@ namespace ManiTests
                 hasPassed &= runSection(child, sectionStack, false);
             }
 
-            //std::cout << ST_DASHES_STRING << "\n";
+            //std::cout << MANI_DASHES_STRING << "\n";
             sectionStack.pop_back();
             section.hasPassed = hasPassed;
             return hasPassed;
@@ -437,7 +437,7 @@ namespace ManiTests
                     while (assertLogs.size() > 0)
                     {
                         std::stringstream ss;
-                        ss << RED << ST_ASSERT_STRING << assertLogs.front() << RESET;
+                        ss << RED << MANI_ASSERT_STRING << assertLogs.front() << RESET;
                 
                         test.addAssertLog(ss.str());
                         assertLogs.pop();
@@ -566,17 +566,17 @@ namespace ManiTests
  * ###############################################################
  */
 
-#define ST_TEST(TESTNAME, DESCRIPTION) \
+#define MANI_TEST(TESTNAME, DESCRIPTION) \
     static void TESTNAME(); \
     static ManiTests::AutoRegister autoRegister_##TESTNAME(#TESTNAME, DESCRIPTION, TESTNAME);\
     static void TESTNAME()
 
-#define ST_TEST_ONLY(TESTNAME, DESCRIPTION) \
+#define MANI_TEST_ONLY(TESTNAME, DESCRIPTION) \
     static void TESTNAME(); \
     static ManiTests::AutoRegister autoRegister_##TESTNAME(#TESTNAME, DESCRIPTION, TESTNAME, true);\
     static void TESTNAME()
 
-#define ST_ASSERT(EXPRESSION, DESCRIPTION) \
+#define MANI_ASSERT(EXPRESSION, DESCRIPTION) \
     if (!(EXPRESSION)) \
     {\
         std::stringstream ss;\
@@ -585,23 +585,23 @@ namespace ManiTests
         return;\
     }
 
-#define ST_SECTION_BEGIN(SECTIONNAME, DESCRIPTION) \
+#define MANI_SECTION_BEGIN(SECTIONNAME, DESCRIPTION) \
     static ManiTests::SectionBeginner sectionBeginner_##SECTIONNAME(#SECTIONNAME, DESCRIPTION);\
     namespace
 
-#define ST_SECTION_BEGIN_ONLY(SECTIONNAME, DESCRIPTION) \
+#define MANI_SECTION_BEGIN_ONLY(SECTIONNAME, DESCRIPTION) \
     static ManiTests::SectionBeginner sectionBeginner_##SECTIONNAME(#SECTIONNAME, DESCRIPTION, true);\
     namespace
 
-#define ST_SECTION_END(SECTIONNAME) \
+#define MANI_SECTION_END(SECTIONNAME) \
     static ManiTests::SectionEnder sectionEnder_##SECTIONNAME;
     
-#define ST_BEFORE_EACH(FUNCTORNAME) \
+#define MANI_BEFORE_EACH(FUNCTORNAME) \
     static void FUNCTORNAME(); \
     static ManiTests::SectionBeforeEachRegister beforeEach_##FUNCTORNAME(FUNCTORNAME); \
     static void FUNCTORNAME()
 
-#define ST_AFTER_EACH(FUNCTORNAME) \
+#define MANI_AFTER_EACH(FUNCTORNAME) \
     static void FUNCTORNAME(); \
     static ManiTests::SectionAfterEachRegister afterEach_##FUNCTORNAME(FUNCTORNAME); \
     static void FUNCTORNAME()
