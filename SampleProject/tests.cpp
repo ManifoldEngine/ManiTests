@@ -1,6 +1,6 @@
 #include <ManiTests/ManiTests.h>
 
-ST_TEST(SomeTestInAnotherFile2, "should pass") 
+MANI_TEST(SomeTestInAnotherFile2, "should pass") 
 {
-	ST_ASSERT(true, "all g");
+	MANI_ASSERT(true, "all g");
 }

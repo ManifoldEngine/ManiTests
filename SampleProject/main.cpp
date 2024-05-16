@@ -1,14 +1,14 @@
 #include <ManiTests/ManiTests.h>
 #include <iostream>
 
-ST_TEST(Test1, "should fail") 
+MANI_TEST(Test1, "should fail") 
 {
-	ST_ASSERT(false, "assert false");
+	MANI_ASSERT(false, "assert false");
 }
 
-ST_TEST(Test2, "should pass") 
+MANI_TEST(Test2, "should pass") 
 {
-	ST_ASSERT(true, "assert true");
+	MANI_ASSERT(true, "assert true");
 }
 
 int main(int argc, char** argv)

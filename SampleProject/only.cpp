@@ -1,29 +1,29 @@
 #include <ManiTests/ManiTests.h>
 
 // Uncomment me to try the _ONLY flow
-//ST_SECTION_BEGIN(OnlySection, "Test only flow")
+//MANI_SECTION_BEGIN(OnlySection, "Test only flow")
 //{
-//	ST_TEST_ONLY(OnlyTest, "OnlyTest, should pass")
+//	MANI_TEST_ONLY(OnlyTest, "OnlyTest, should pass")
 //	{
-//		ST_ASSERT(true, "assert true");
+//		MANI_ASSERT(true, "assert true");
 //	}
 //
-//	ST_TEST(NotOnlyTest, "Should not run, if it does, fails.")
+//	MANI_TEST(NotOnlyTest, "Should not run, if it does, fails.")
 //	{
-//		ST_ASSERT(false, "assert false");
+//		MANI_ASSERT(false, "assert false");
 //	}
 //}
-//ST_SECTION_END(OnlySection)
+//MANI_SECTION_END(OnlySection)
 //
-//ST_SECTION_BEGIN(OnlySubSection, "Test only flow with subsections")
+//MANI_SECTION_BEGIN(OnlySubSection, "Test only flow with subsections")
 //{
-//	ST_SECTION_BEGIN_ONLY(OnlySubSubSection, "Test only flow with subsections")
+//	MANI_SECTION_BEGIN_ONLY(OnlySubSubSection, "Test only flow with subsections")
 //	{
-//		ST_TEST(TestInOnlySubsection, "Only subsection Test, should pass")
+//		MANI_TEST(TestInOnlySubsection, "Only subsection Test, should pass")
 //		{
-//			ST_ASSERT(true, "assert true");
+//			MANI_ASSERT(true, "assert true");
 //		}
 //	}
-//	ST_SECTION_END(OnlySubSubSection)
+//	MANI_SECTION_END(OnlySubSubSection)
 //}
-//ST_SECTION_END(OnlySubSection)
+//MANI_SECTION_END(OnlySubSection)
