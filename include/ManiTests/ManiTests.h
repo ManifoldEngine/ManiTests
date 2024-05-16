@@ -558,12 +558,6 @@ namespace ManiTests
             ManiTestsContext::endSection();
         }
     };
-
-    // runs all the tests!
-    void runTests()
-    {
-        ManiTestsRunner::runTests();
-    }
 }
 
 /*
