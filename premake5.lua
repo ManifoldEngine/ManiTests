@@ -1,4 +1,4 @@
-workspace "SimpleTests"
+workspace "ManiTests"
     outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
     configurations { "Debug" }

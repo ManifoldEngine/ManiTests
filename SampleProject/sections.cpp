@@ -1,4 +1,4 @@
-#include "simpleTests.h"
+#include <ManiTests/ManiTests.h>
 
 ST_SECTION_BEGIN(Section1, "This is the first section")
 {

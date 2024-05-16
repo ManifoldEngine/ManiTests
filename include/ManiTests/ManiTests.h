@@ -7,14 +7,14 @@
 #include <iostream>
 #include <sstream>
 
-// # SimpleTests
+// # ManiTests
 // Simple single header C++ test library
 // 
 // Simple Tests is a simple single header testing library that I made because I'm too stupid to use Catch2, googletest, 
 // or the other cool testing frameworks.
 // 
 // # Installation instructions
-// Download `include/simpleTests.h` and include it in your project and build system
+// Download `include/ManiTests.h` and include it in your project and build system
 // 
 // # How - to:
 // ## Declare a test
@@ -53,7 +53,7 @@
 // ## Run a single Test or Section
 // Use `ST_TEST_ONLY` and /or `ST_SECTION_BEGIN_ONLY` to isolate tests.This is useful when debugging a single test or section.There's no need to run all the tests everytime if you're iterating.
 // ```c+ +
-// #include "simpleTests.h"
+// #include "ManiTests.h"
 // 
 // ST_SECTION_BEGIN(OnlySection, "Test only flow")
 // {
@@ -90,7 +90,7 @@
 // ```c+ +
 // int main()
 // {
-//     return SimpleTests::SimpleTestsRunner::runTests();
+//     return ManiTests::ManiTestsRunner::runTests();
 // }
 // ```
 // 
@@ -98,7 +98,7 @@
 // ```
 // [--------] Global
 // [ FAILED ] |--Test1: should fail
-// [ ASSERT ] |--[ASSERT] Failed : assert false (C:\Repository\SimpleTests\SampleProject\main.cpp:5)
+// [ ASSERT ] |--[ASSERT] Failed : assert false (C:\Repository\ManiTests\SampleProject\main.cpp:5)
 // [   ok   ] |--Test2 : should pass
 // [   ok   ] |--SomeNotFancyTest : Should not be initialized
 // [   ok   ] |--SomeTestInAnotherFile2 : should pass
@@ -123,7 +123,7 @@
  * Simple Tests Core
  * ###############################################################
  */
-namespace SimpleTests
+namespace ManiTests
 {
 // Colors
 #define RED         "\033[31m"      /* Red */
@@ -210,7 +210,7 @@ namespace SimpleTests
 
     // Simple's test context. this struct exposes all the Simple tests' state as static function. This way they're initialized when we call
     // the getter for the first time, avoiding initialization order bugs. 
-    struct SimpleTestsContext
+    struct ManiTestsContext
     {
         // registers a new test case
         static void registerTest(const std::string& title, const std::string& description, std::function<void()> func, bool isOnly)
@@ -246,7 +246,7 @@ namespace SimpleTests
 
         static void endSection()
         {
-            SimpleTestsContext::getSectionStack().pop_back();
+            ManiTestsContext::getSectionStack().pop_back();
         }
 
         static std::queue<std::string>& getAssertLogs() 
@@ -274,12 +274,12 @@ namespace SimpleTests
         }
     };
 
-    struct SimpleTestsRunner
+    struct ManiTestsRunner
     {
         // Executes all tests in s_tests
         static int runTests()
         {
-            Section global = SimpleTestsContext::getGlobalSection();
+            Section global = ManiTestsContext::getGlobalSection();
             
             const bool shouldCheckIsOnly = hasIsOnly(global);
             processIsAllowedToRunFlag(global, shouldCheckIsOnly, global.isOnly);
@@ -427,7 +427,7 @@ namespace SimpleTests
                     }
                 }
 
-                auto& assertLogs = SimpleTestsContext::getAssertLogs();
+                auto& assertLogs = ManiTestsContext::getAssertLogs();
 
                 test.hasPassed = assertLogs.size() == 0;
                 hasPassed &= test.hasPassed;
@@ -523,7 +523,7 @@ namespace SimpleTests
     {
         AutoRegister(const std::string& title, const std::string& description, std::function<void()> func, bool isOnly = false)
         {
-            SimpleTestsContext::registerTest(title, description, func, isOnly);
+            ManiTestsContext::registerTest(title, description, func, isOnly);
         };
     };
 
@@ -531,7 +531,7 @@ namespace SimpleTests
     {
         SectionBeginner(const std::string& title, const std::string& description, bool isOnly = false)
         {
-            SimpleTestsContext::beginSection(title, description, isOnly);
+            ManiTestsContext::beginSection(title, description, isOnly);
         }
     };
 
@@ -539,7 +539,7 @@ namespace SimpleTests
     {
         SectionBeforeEachRegister(std::function<void()> f)
         {
-            SimpleTestsContext::registerBeforeEach(f);
+            ManiTestsContext::registerBeforeEach(f);
         }
     };
 
@@ -547,7 +547,7 @@ namespace SimpleTests
     {
         SectionAfterEachRegister(std::function<void()> f)
         {
-            SimpleTestsContext::registerAfterEach(f);
+            ManiTestsContext::registerAfterEach(f);
         }
     };
 
@@ -555,7 +555,7 @@ namespace SimpleTests
     {
         SectionEnder()
         {
-            SimpleTestsContext::endSection();
+            ManiTestsContext::endSection();
         }
     };
 }
@@ -568,12 +568,12 @@ namespace SimpleTests
 
 #define ST_TEST(TESTNAME, DESCRIPTION) \
     static void TESTNAME(); \
-    static SimpleTests::AutoRegister autoRegister_##TESTNAME(#TESTNAME, DESCRIPTION, TESTNAME);\
+    static ManiTests::AutoRegister autoRegister_##TESTNAME(#TESTNAME, DESCRIPTION, TESTNAME);\
     static void TESTNAME()
 
 #define ST_TEST_ONLY(TESTNAME, DESCRIPTION) \
     static void TESTNAME(); \
-    static SimpleTests::AutoRegister autoRegister_##TESTNAME(#TESTNAME, DESCRIPTION, TESTNAME, true);\
+    static ManiTests::AutoRegister autoRegister_##TESTNAME(#TESTNAME, DESCRIPTION, TESTNAME, true);\
     static void TESTNAME()
 
 #define ST_ASSERT(EXPRESSION, DESCRIPTION) \
@@ -581,27 +581,27 @@ namespace SimpleTests
     {\
         std::stringstream ss;\
         ss << "Failed: " << DESCRIPTION << " (" << __FILE__ << ":" << __LINE__ << ")\n";\
-        SimpleTests::SimpleTestsContext::notifyAssertFailed(ss.str());\
+        ManiTests::ManiTestsContext::notifyAssertFailed(ss.str());\
         return;\
     }
 
 #define ST_SECTION_BEGIN(SECTIONNAME, DESCRIPTION) \
-    static SimpleTests::SectionBeginner sectionBeginner_##SECTIONNAME(#SECTIONNAME, DESCRIPTION);\
+    static ManiTests::SectionBeginner sectionBeginner_##SECTIONNAME(#SECTIONNAME, DESCRIPTION);\
     namespace
 
 #define ST_SECTION_BEGIN_ONLY(SECTIONNAME, DESCRIPTION) \
-    static SimpleTests::SectionBeginner sectionBeginner_##SECTIONNAME(#SECTIONNAME, DESCRIPTION, true);\
+    static ManiTests::SectionBeginner sectionBeginner_##SECTIONNAME(#SECTIONNAME, DESCRIPTION, true);\
     namespace
 
 #define ST_SECTION_END(SECTIONNAME) \
-    static SimpleTests::SectionEnder sectionEnder_##SECTIONNAME;
+    static ManiTests::SectionEnder sectionEnder_##SECTIONNAME;
     
 #define ST_BEFORE_EACH(FUNCTORNAME) \
     static void FUNCTORNAME(); \
-    static SimpleTests::SectionBeforeEachRegister beforeEach_##FUNCTORNAME(FUNCTORNAME); \
+    static ManiTests::SectionBeforeEachRegister beforeEach_##FUNCTORNAME(FUNCTORNAME); \
     static void FUNCTORNAME()
 
 #define ST_AFTER_EACH(FUNCTORNAME) \
     static void FUNCTORNAME(); \
-    static SimpleTests::SectionAfterEachRegister afterEach_##FUNCTORNAME(FUNCTORNAME); \
+    static ManiTests::SectionAfterEachRegister afterEach_##FUNCTORNAME(FUNCTORNAME); \
     static void FUNCTORNAME()

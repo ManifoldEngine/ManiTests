@@ -1,4 +1,4 @@
-#include "simpleTests.h"
+#include <ManiTests/ManiTests.h>
 #include <iostream>
 
 ST_TEST(Test1, "should fail") 
@@ -13,5 +13,5 @@ ST_TEST(Test2, "should pass")
 
 int main(int argc, char** argv)
 {
-	return SimpleTests::SimpleTestsRunner::runTests();
+	return ManiTests::ManiTestsRunner::runTests();
 }

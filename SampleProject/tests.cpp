@@ -1,4 +1,4 @@
-#include "simpleTests.h"
+#include <ManiTests/ManiTests.h>
 
 ST_TEST(SomeTestInAnotherFile2, "should pass") 
 {

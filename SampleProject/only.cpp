@@ -1,4 +1,4 @@
-#include "simpleTests.h"
+#include <ManiTests/ManiTests.h>
 
 // Uncomment me to try the _ONLY flow
 //ST_SECTION_BEGIN(OnlySection, "Test only flow")
