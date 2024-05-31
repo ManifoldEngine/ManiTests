@@ -2,5 +2,5 @@
 
 MANI_TEST(SomeTestInAnotherFile2, "should pass") 
 {
-	MANI_ASSERT(true, "all g");
+	MANI_TEST_ASSERT(true, "all g");
 }

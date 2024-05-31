@@ -23,7 +23,7 @@
 // 
 // MANI_TEST(ATestName, "Some description on what the test does")
 // {
-//     MANI_ASSERT(true, "this test cannot fail.")
+//     MANI_TEST_ASSERT(true, "this test cannot fail.")
 // }
 // ```
 // 
@@ -40,7 +40,7 @@
 // 
 //     MANI_TEST(MyTest, "My test's description")
 //     {
-//         MANI_ASSERT(true, "all is good.");
+//         MANI_TEST_ASSERT(true, "all is good.");
 //     }
 // 
 //     MANI_AFTER_EACH(MyAfterEachFunctor)
@@ -60,13 +60,13 @@
 //     // this test will run
 //     MANI_TEST_ONLY(OnlyTest, "OnlyTest, should pass")
 //     {
-//         MANI_ASSERT(true, "assert true");
+//         MANI_TEST_ASSERT(true, "assert true");
 //     }
 // 
 //     // this test will not run
 //     MANI_TEST(NotOnlyTest, "Should not run, if it does, fails.")
 //     {
-//         MANI_ASSERT(false, "assert false");
+//         MANI_TEST_ASSERT(false, "assert false");
 //     }
 // }
 // MANI_SECTION_END(OnlySection)
@@ -78,7 +78,7 @@
 //     {
 //         MANI_TEST(TestInOnlySubsection, "Only subsection Test, should pass")
 //         {
-//             MANI_ASSERT(true, "assert true");
+//             MANI_TEST_ASSERT(true, "assert true");
 //         }
 //     }
 //     MANI_SECTION_END(OnlySubSubSection)
@@ -576,7 +576,7 @@ namespace ManiTests
     static ManiTests::AutoRegister autoRegister_##TESTNAME(#TESTNAME, DESCRIPTION, TESTNAME, true);\
     static void TESTNAME()
 
-#define MANI_ASSERT(EXPRESSION, DESCRIPTION) \
+#define MANI_TEST_ASSERT(EXPRESSION, DESCRIPTION) \
     if (!(EXPRESSION)) \
     {\
         std::stringstream ss;\
