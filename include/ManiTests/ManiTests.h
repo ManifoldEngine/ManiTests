@@ -125,11 +125,14 @@
  */
 namespace ManiTests
 {
-// Colors
-#define RED         "\033[31m"      /* Red */
-#define GREEN       "\033[32m"      /* Green */
-#define BOLD        "\033[1m"
-#define RESET       "\033[0m"
+    namespace LogColors
+    {
+        // Colors
+        constexpr std::string_view RED         = "\033[31m";      /* Red */
+        constexpr std::string_view GREEN       = "\033[32m";      /* Green */
+        constexpr std::string_view BOLD        = "\033[1m";
+        constexpr std::string_view RESET       = "\033[0m";
+    }
 
 // labels
 #define MANI_DASHES_STRING "[--------] "
@@ -161,15 +164,15 @@ namespace ManiTests
             // if atleast one assert log was pushed in the s_assertLogs, the test has failed.
             if (!hasPassed)
             {
-                testStream << BOLD << RED << MANI_FAILED_STRING << RED << indent << title << ": " << description << RESET << "\n";
+                testStream << LogColors::BOLD << LogColors::RED << MANI_FAILED_STRING << LogColors::RED << indent << title << ": " << description << LogColors::RESET << "\n";
                 for (const std::string& assertLog : assertLogs)
                 {
-                    testStream << RED << MANI_ASSERT_STRING << indent << assertLog << RESET;
+                    testStream << LogColors::RED << MANI_ASSERT_STRING << indent << assertLog << LogColors::RESET;
                 }
             }
             else
             {
-                testStream << BOLD << GREEN << MANI_PASSED_STRING << RESET << indent << title << ": " << description << "\n";
+                testStream << LogColors::BOLD << LogColors::GREEN << MANI_PASSED_STRING << LogColors::RESET << indent << title << ": " << description << "\n";
             }
 
             return testStream.str();
@@ -202,8 +205,8 @@ namespace ManiTests
         {
             // display the section title and description
             std::stringstream sectionTitle;
-            sectionTitle << (hasPassed ? GREEN : RED) << MANI_DASHES_STRING << RESET;
-            sectionTitle << indent << BOLD << title << (description.empty() ? "" : ": " + description) << RESET << "\n";
+            sectionTitle << (hasPassed ? LogColors::GREEN : LogColors::RED) << MANI_DASHES_STRING << LogColors::RESET;
+            sectionTitle << indent << LogColors::BOLD << title << (description.empty() ? "" : ": " + description) << LogColors::RESET << "\n";
             return sectionTitle.str();
         }
     };
@@ -437,7 +440,7 @@ namespace ManiTests
                     while (assertLogs.size() > 0)
                     {
                         std::stringstream ss;
-                        ss << RED << MANI_ASSERT_STRING << assertLogs.front() << RESET;
+                        ss << LogColors::RED << MANI_ASSERT_STRING << assertLogs.front() << LogColors::RESET;
                 
                         test.addAssertLog(ss.str());
                         assertLogs.pop();
