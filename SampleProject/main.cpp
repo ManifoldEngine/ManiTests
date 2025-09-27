@@ -13,5 +13,5 @@ MANI_TEST(Test2, "should pass")
 
 int main(int argc, char** argv)
 {
-	return ManiTests::ManiTestsRunner::runTests();
+	return ManiTests::run();
 }
