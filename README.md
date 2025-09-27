@@ -81,7 +81,7 @@ MANI_SECTION_END(OnlySubSection)
 ```c+ +
 int main()
 {
-    return ManiTests::ManiTestsRunner::runTests();
+    return ManiTests::run();
 }
 ```
 
